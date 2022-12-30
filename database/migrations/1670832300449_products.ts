@@ -17,7 +17,7 @@ export default class extends BaseSchema {
             table.string('image', 255).defaultTo('http://via.placeholder.com/50x50')
             table.string('unit', 50).nullable()
             table.string('status').defaultTo('active')
-
+            table.unique(['shop_id', 'sku', 'upc_code'])
             /**
              * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
              */

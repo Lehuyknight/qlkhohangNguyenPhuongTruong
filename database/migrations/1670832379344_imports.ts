@@ -8,7 +8,6 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string("invoice_number").notNullable()
       table.integer("shop_id").unsigned()
-      table.integer("product_id").unsigned()
       table.integer("supplier_id").unsigned()
       table.integer("total").defaultTo(0)
 

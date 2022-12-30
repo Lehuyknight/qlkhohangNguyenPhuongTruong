@@ -41,6 +41,7 @@ export default class ExportsController {
                 }
             }
             const importData ={customerId: val.customerId,productList: val.productList,shopId: user.id}
+            console.log(importData)
             await CreateInvoiceService.createImportInvoice(importData)
             return rps.responseWithCustomMessage(
                 response,
@@ -56,7 +57,7 @@ export default class ExportsController {
                 400,
                 err,
                 false,
-                `Tạo hóa đơn nhập thất bại ${err}`
+                `Tạo hóa đơn xuất thất bại ${err}`
             )
         }
     }

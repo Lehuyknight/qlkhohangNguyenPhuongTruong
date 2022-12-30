@@ -99,12 +99,13 @@ export default class CreateInvoiceService {
                 if (newProduct) {
                     const existProduct = await Product.query()
                         .select('*')
-                        .where('shop_id', val.shopId)
+                        .where('shop_id', val.customerId)
                         .where('upc_code', newProduct?.upcCode)
                         .first()
                     if (existProduct) {
                         existProduct.inStock += product.qty
                         await existProduct.save()
+                        console.log(1)
                     } else {
                         await Product.create({
                             shopId: val.shopId,
@@ -114,10 +115,12 @@ export default class CreateInvoiceService {
                             price: newProduct.price,
                             status: 'active',
                         })
+                        console.log(2)
                     }
                 }
             }
         } catch (err) {
+            console.log(`err`)
             return
         }
     }

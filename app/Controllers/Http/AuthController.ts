@@ -1,10 +1,16 @@
+import * as Admin from 'firebase-admin/auth'
+import * as App from 'firebase-admin'
 import Hash from '@ioc:Adonis/Core/Hash'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import User from 'App/Models/User'
 import ResponseService from 'App/Services/ResponseService'
 import RegisterValidator from 'App/Validators/RegisterValidator'
-
+import { validator, rules, schema as Schema } from '@ioc:Adonis/Core/Validator'
+const serviceAccount = require('App/utils/qlkh-service.json')
+const app = App.initializeApp({
+    credential: App.credential.cert(serviceAccount),
+})
 const rps = new ResponseService()
 
 export default class AuthController {
@@ -35,6 +41,53 @@ export default class AuthController {
             )
         }
     }
+
+    //register with firebase
+
+    // public async register({ request, response, auth }: HttpContextContract) {
+    //     const uid = request.input('uid')
+    //     const getAuth = await Admin.getAuth(app).getUser(uid)
+    //     const user = getAuth.toJSON()
+    //     const phone = user['phoneNumber'].replace('+84', '0')
+    //     const name = request.input('name')
+    //     const password = request.input('password')
+    //     try {
+    //         const val = await validator.validate({
+    //             schema: Schema.create({
+    //                 uid: Schema.string({ trim: true }),
+    //                 name: Schema.string({ trim: true }),
+    //                 phone: Schema.string([
+    //                     rules.unique({ table: 'users', column: 'phone' }),
+    //                     rules.mobile(),
+    //                 ]),
+    //                 password: Schema.string({}, [
+    //                     rules.minLength(6),
+    //                     rules.maxLength(50),
+    //                 ]),
+    //             }),
+    //             data: {
+    //                 uid,
+    //                 name,
+    //                 phone,
+    //                 password,
+    //             },
+    //         })
+    //         const user = await User.create({
+    //             name: val.name,
+    //             password: val.password,
+    //             phone: val.phone
+    //         })
+    //         const token = await auth.use('api').attempt(val.phone, val.password)
+    //         return rps.responseWithCustomMessage(response, 201, {
+    //             user:user,
+    //             token:token.token
+    //         },
+    //         true,
+    //         'Đăng kí thành công ')
+    //     } catch (err) {
+    //         return rps.responseWithCustomMessage(response, 400, err, false, 'Tạo tài khoản thất bại')
+    //     }
+    // }
 
     //đăng nhập
     public async login({ auth, request, response }: HttpContextContract) {
@@ -106,16 +159,28 @@ export default class AuthController {
     }
 
     //logout
-    public async logout({response, auth}:HttpContextContract){
-         //revoke token
-         const check = await auth.use('api').isLoggedIn
-         if (check) {
-             const userId = await auth.use('api').user?.id!
-             await auth.use('api').revoke()
-             await Database.from('user_tokens').delete().where('user_id', userId)
-             return rps.responseWithCustomMessage(response, 200, null, true, `Đăng xuất thành công`)
-         } else {
-             return rps.responseWithCustomMessage(response, 401, null, false, `Đã đăng xuất`)
-         }
+    public async logout({ response, auth }: HttpContextContract) {
+        //revoke token
+        const check = await auth.use('api').isLoggedIn
+        if (check) {
+            const userId = await auth.use('api').user?.id!
+            await auth.use('api').revoke()
+            await Database.from('user_tokens').delete().where('user_id', userId)
+            return rps.responseWithCustomMessage(
+                response,
+                200,
+                null,
+                true,
+                `Đăng xuất thành công`
+            )
+        } else {
+            return rps.responseWithCustomMessage(
+                response,
+                401,
+                null,
+                false,
+                `Đã đăng xuất`
+            )
+        }
     }
 }
