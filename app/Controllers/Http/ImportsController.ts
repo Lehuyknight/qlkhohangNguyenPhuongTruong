@@ -39,7 +39,9 @@ export default class ImportsController {
         }
         try {
             await newImport.merge({ total: total }).save()
-            await newImport.load('importDetails')
+            await newImport.load('importDetails', (query) => {
+                query.preload('product')
+            })
             for (let product of val.productList) {
                 const existProduct = await Product.query()
                     .select('*')
