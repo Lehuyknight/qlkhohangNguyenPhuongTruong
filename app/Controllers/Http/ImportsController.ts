@@ -54,6 +54,7 @@ export default class ImportsController {
                         shopId: user.id,
                         upcCode: product.upcCode,
                         name: product.name,
+                        sku: Product.generateSku(user.id, product.name, ),
                         inStock: product.qty,
                         price: product.unitPrice,
                         status: 'active',
