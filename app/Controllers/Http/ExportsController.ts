@@ -32,7 +32,9 @@ export default class ExportsController {
         }
         try{
             await newExportOrder.merge({total: total}).save()
-            await newExportOrder.load('exportDetails')
+            await newExportOrder.load('exportDetails', (query) => {
+                query.preload('product')
+            })
             for(let product of newExportOrder.exportDetails){
                 const productInstance = await Product.query().select('*').where('id', product.productId).where('shop_id', user.id).first()
                 if(productInstance){
@@ -41,7 +43,6 @@ export default class ExportsController {
                 }
             }
             const importData ={customerId: val.customerId,productList: val.productList,shopId: user.id}
-            console.log(importData)
             await CreateInvoiceService.createImportInvoice(importData)
             return rps.responseWithCustomMessage(
                 response,

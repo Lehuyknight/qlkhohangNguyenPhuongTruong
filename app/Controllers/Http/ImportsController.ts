@@ -15,6 +15,15 @@ export default class ImportsController {
     }: HttpContextContract) {
         const user = await auth.use('api').user!
         const val = await request.validate(CreateImportValidator)
+        if(val.supplierId === user.id){
+            return rps.responseWithCustomMessage(
+                response,
+                400,
+                null,
+                false,
+                `Không thể tự nhập hàng của chính mình`
+            )
+        }
         const newImport = await Import.create({
             shopId: user.id,
             supplierId: val.supplierId,
@@ -58,7 +67,7 @@ export default class ImportsController {
                 201,
                 newImport,
                 true,
-                `Nhập hành thành công `
+                `Nhập hàng thành công `
             )
         } catch (err) {
             return rps.responseWithCustomMessage(
