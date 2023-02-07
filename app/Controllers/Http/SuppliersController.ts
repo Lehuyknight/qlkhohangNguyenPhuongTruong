@@ -99,7 +99,7 @@ export default class SuppliersController {
     }: HttpContextContract) {
         try {
             const supplier = await Supplier.findOrFail(params.id)
-            await supplier.load('takeins')
+            // await supplier.load('takeins')
             try {
                 await bouncer.with('SupplierPolicy').authorize('view', supplier)
                 return rps.responseWithCustomMessage(

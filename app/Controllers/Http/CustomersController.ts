@@ -102,7 +102,7 @@ export default class CustomersController {
                 201,
                 customer,
                 true,
-                `Tạo khách hàng thành công`
+                `Lấy thông tin khách hàng thành công`
             )
         } catch (err) {
             return rps.responseWithCustomMessage(
