@@ -69,6 +69,6 @@ export default class Product extends compose(BaseModel, Filterable) {
     public users: HasOne<typeof User>
 
     public static generateSku(shopId, name: string):string{
-        return `PROD-${shopId}${name.substring(0, 2)s}`
+        return `PROD-${shopId}${name.substring(0, 2)}`
     }
 }
