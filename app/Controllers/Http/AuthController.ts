@@ -95,10 +95,11 @@ export default class AuthController {
         const password = request.input('password')
         try {
             const token = await auth.use('api').attempt(phone, password)
+            const user = await User.findBy('phone', phone)
             return rps.responseWithCustomMessage(
                 response,
                 200,
-                { token: token.token },
+                { token: token.token, user: user},
                 true,
                 'Đăng nhập thành công'
             )
