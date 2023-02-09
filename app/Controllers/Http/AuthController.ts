@@ -34,7 +34,7 @@ export default class AuthController {
             return rps.responseWithCustomMessage(
                 response,
                 400,
-                error.messages.errors,
+                error,
                 false,
                 'Đăng kí thất bại'
             )
