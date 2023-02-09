@@ -8,9 +8,9 @@ import ResponseService from 'App/Services/ResponseService'
 import RegisterValidator from 'App/Validators/RegisterValidator'
 import { validator, rules, schema as Schema } from '@ioc:Adonis/Core/Validator'
 const serviceAccount = require('App/utils/qlkh-service.json')
-const app = App.initializeApp({
-    credential: App.credential.cert(serviceAccount),
-})
+// const app = App.initializeApp({
+//     credential: App.credential.cert(serviceAccount),
+// })
 const rps = new ResponseService()
 
 export default class AuthController {
@@ -18,7 +18,6 @@ export default class AuthController {
     public async register({ request, response }: HttpContextContract) {
         try {
             const data = await request.validate(RegisterValidator)
-
             const user = await User.create({
                 name: data.name,
                 phone: data.phone,
