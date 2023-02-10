@@ -125,7 +125,7 @@ export default class CustomersController {
             limit = 10,
             ...input
         } = request.qs()
-        if(user.id){
+        if(user){
             const result = await Customer.filter(input)
                 .where('shop_id', user?.id)
                 .orderBy(key, sort)

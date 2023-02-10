@@ -11,6 +11,15 @@ const rps = new ResponseService()
 export default class ExportsController {
     public async exportProduct({request, response, auth}:HttpContextContract){
         const user = await auth.use('api').user!
+        if(!user){
+            return rps.responseWithCustomMessage(
+                response,
+                401,
+                user,
+                false,
+                `Thông tin người dùng không hợp lệ`
+            )
+        }
         const val = await request.validate(CreateExportValidator)
         const newExportOrder = await Export.create({
             shopId: user.id,

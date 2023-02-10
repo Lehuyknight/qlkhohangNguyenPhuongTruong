@@ -14,6 +14,15 @@ export default class ImportsController {
         auth,
     }: HttpContextContract) {
         const user = await auth.use('api').user!
+        if(!user){
+            return rps.responseWithCustomMessage(
+                response,
+                401,
+                user,
+                false,
+                `Thông tin người dùng không hợp lệ`
+            )
+        }
         const val = await request.validate(CreateImportValidator)
         if(val.supplierId === user.id){
             return rps.responseWithCustomMessage(
