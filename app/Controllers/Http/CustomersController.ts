@@ -125,17 +125,29 @@ export default class CustomersController {
             limit = 10,
             ...input
         } = request.qs()
-        const result = await Customer.filter(input)
-            .where('shop_id', user?.id)
-            .orderBy(key, sort)
-            .paginate(page, limit)
-        return rps.responseWithCustomMessage(
-            response,
-            200,
-            result,
-            true,
-            `Lấy thông tin tất cả khách hàng thành công`
-        )
+        if(user.id){
+            const result = await Customer.filter(input)
+                .where('shop_id', user?.id)
+                .orderBy(key, sort)
+                .paginate(page, limit)
+            return rps.responseWithCustomMessage(
+                response,
+                200,
+                result,
+                true,
+                `Lấy thông tin tất cả khách hàng thành công`
+            )
+        }
+        else{
+            return rps.responseWithCustomMessage(
+                response,
+                401,
+                null,
+                false,
+                `Thông tin đăng nhập không hợp lệ`
+            )
+        }
+        
     }
 
     //delete

@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
 import {
     BaseModel,
+    BelongsTo,
+    belongsTo,
     column,
     HasMany,
     hasMany,
@@ -60,8 +62,8 @@ export default class Product extends compose(BaseModel, Filterable) {
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
 
-    @hasOne(() => Category)
-    public category: HasOne<typeof Category>
+    @belongsTo(() => Category)
+    public category: BelongsTo<typeof Category>
 
     @hasOne(() => User, {
         foreignKey: 'shopId',

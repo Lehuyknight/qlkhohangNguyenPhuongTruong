@@ -77,6 +77,7 @@ export default class ProductsController {
             }
         }
         catch(error){
+            console.log(error)
             return rps.responseWithCustomMessage(response, 400, error, false, `Không tìm thấy sản phẩm`)
         }
     }
